@@ -15,4 +15,6 @@ Run `yarn build`
 
 The output file `index.js` will be in the `dist/` folder.
 
+You can view the game in your browser by opening `index.html`.
+
 To run tests simply run `yarn test`.
