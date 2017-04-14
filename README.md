@@ -1,5 +1,7 @@
 # minesweeper.js
-a basic javascript implementation of the game "minesweeper"
+A basic javascript implementation of the game "minesweeper"
+
+:information_desk_person: [Try it in your browser](https://kafene.github.io/minesweeper.js/dist/index.html)
 
 To play, select a mode - click one of the buttons "Easy", "Normal" or "Hard".
 
