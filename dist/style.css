@@ -1,0 +1,108 @@
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    font-size: 16px;
+    font-family: sans-serif;
+    line-height: 20px;
+}
+
+body {
+    width: 600px;
+    margin: 0 auto;
+}
+
+#header {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+#header-actions {
+    text-align: left;
+}
+
+#start-buttons {
+    display: inline-block;
+}
+
+#start-buttons button {
+    margin-right: 0.5em;
+}
+
+#status, #game-actions {
+    border: 1px solid #333;
+    list-style: inside none;
+    display: flex;
+    justify-content: space-between;
+    font-family: monospace;
+    font-size: 1.25rem;
+    padding: 0.25em 0.5em;
+}
+
+#game-actions {
+    margin-top: 0;
+    margin-bottom: 0.5em;
+    border-top-width: 0;
+}
+
+#status {
+    margin-bottom: 0;
+}
+
+#grid {
+    display: table;
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+
+#grid .row {
+    display: table-row;
+}
+
+#grid .cell {
+    display: table-cell;
+    background: #eee;
+    border: 1px solid #ccc;
+    height: 20px;
+    width: 20px;
+    font-family: monospace;
+    line-height: 1em;
+    font-size: 0.8em;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#grid .cell:hover {
+    background: #ccc;
+}
+
+#grid .cell.selected {
+    background: #333;
+    color: #fff;
+}
+
+#grid .cell.has-mine {
+    color: #f00;
+}
+
+#game.active #playing {
+    color: #006400;
+}
+
+#game.ended #playing {
+    color: #8b0000;
+    font-weight: bold;
+}
+
+#game.ended #grid {
+    opacity: 0.65;
+}
+
+#grid .cell, a, button, .pointer {
+    cursor: pointer;
+}
+
+#grid .cell.disabled, button[disabled] {
+    cursor: not-allowed;
+}
