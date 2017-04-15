@@ -43,18 +43,20 @@ export default class Minesweeper {
 
         // set up the game action buttons - a "give up" button, and a restart button.
         $("#game-actions").empty().append(
-            $("<button>").
-                prop({type: "button", id: "giveup-button"}).
-                html("[&#10006;] I give up").
-                attr("title", "Forefeit the current game.").
-                on("click", this.gameOver.bind(this, false)).
-                appendTo("<li>"),
-            $("<button>").
-                prop({type: "button", id: "restart-button"}).
-                html("[&#x21bb;] Restart").
-                attr("title", "Restart the current game.").
-                on("click", this.restart.bind(this)).
-                appendTo("<li>")
+            $("<li>").append(
+                $("<button>").
+                    prop({type: "button", id: "giveup-button"}).
+                    html("[&#10006;] Give up").
+                    attr("title", "Forefeit the current game.").
+                    on("click", this.gameOver.bind(this, false))
+            ),
+            $("<li>").append(
+                $("<button>").
+                    prop({type: "button", id: "restart-button"}).
+                    html("[&#x21bb;] Restart").
+                    attr("title", "Restart the current game.").
+                    on("click", this.restart.bind(this))
+            )
         );
 
         // show the number of mines in the grid.

@@ -17761,7 +17761,7 @@ var Minesweeper = function () {
         }
 
         if (!Minesweeper.modes[mode]) {
-            throw new Error("Unknown mode \"" + mode + ".");
+            throw new Error("Unknown mode \"" + mode + "\"");
         }
 
         this.mode = Minesweeper.modes[mode];
@@ -17792,7 +17792,7 @@ var Minesweeper = function () {
             (0, _jquery2.default)("#timer").text("000");
 
             // set up the game action buttons - a "give up" button, and a restart button.
-            (0, _jquery2.default)("#game-actions").empty().append((0, _jquery2.default)("<button>").prop({ type: "button", id: "giveup-button" }).html("[&#10006;] I give up").attr("title", "Forefeit the current game.").on("click", this.gameOver.bind(this, false)).appendTo("<li>"), (0, _jquery2.default)("<button>").prop({ type: "button", id: "restart-button" }).html("[&#x21bb;] Restart").attr("title", "Restart the current game.").on("click", this.restart.bind(this)).appendTo("<li>"));
+            (0, _jquery2.default)("#game-actions").empty().append((0, _jquery2.default)("<li>").append((0, _jquery2.default)("<button>").prop({ type: "button", id: "giveup-button" }).html("[&#10006;] Give up").attr("title", "Forefeit the current game.").on("click", this.gameOver.bind(this, false))), (0, _jquery2.default)("<li>").append((0, _jquery2.default)("<button>").prop({ type: "button", id: "restart-button" }).html("[&#x21bb;] Restart").attr("title", "Restart the current game.").on("click", this.restart.bind(this))));
 
             // show the number of mines in the grid.
             (0, _jquery2.default)("#mines").text(String(this.mode.mines));
