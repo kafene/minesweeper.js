@@ -41,23 +41,9 @@ export default class Minesweeper {
         this.timer.reset();
         $("#timer").text("000");
 
-        // set up the game action buttons - a "give up" button, and a restart button.
-        $("#game-actions").empty().append(
-            $("<li>").append(
-                $("<button>").
-                    prop({type: "button", id: "giveup-button"}).
-                    html("[&#10006;] Give up").
-                    attr("title", "Forefeit the current game.").
-                    on("click", this.gameOver.bind(this, false))
-            ),
-            $("<li>").append(
-                $("<button>").
-                    prop({type: "button", id: "restart-button"}).
-                    html("[&#x21bb;] Restart").
-                    attr("title", "Restart the current game.").
-                    on("click", this.restart.bind(this))
-            )
-        );
+        // set up the game action buttons.
+        $("#giveup-button").off().prop("disabled", false).on("click", this.gameOver.bind(this, false));
+        $("#restart-button").off().prop("disabled", false).on("click", this.restart.bind(this));
 
         // show the number of mines in the grid.
         $("#mines").text(String(this.mode.mines));
@@ -99,10 +85,10 @@ export default class Minesweeper {
 
         const message = victory ? "you won!" : "you lost.";
 
-        // unbind click events from all cells and the action buttons and mark them disabled.
-        $("#grid .cell").off("click").addClass("disabled");
-        $("#restart-button").off("click").prop("disabled", true);
-        $("#giveup-button").off("click").prop("disabled", true);
+        // unbind events from all cells and the action buttons and mark them disabled.
+        $("#grid .cell").off().addClass("disabled");
+        $("#restart-button").off().prop("disabled", true);
+        $("#giveup-button").off().prop("disabled", true);
 
         // indicate the game has ended.
         $("#game").removeClass("active").addClass("ended");
