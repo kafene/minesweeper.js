@@ -15,7 +15,7 @@ export default class Minesweeper {
         }
 
         if (!Minesweeper.modes[mode]) {
-            throw new Error(`Unknown mode "${mode}.`);
+            throw new Error(`Unknown mode "${mode}"`);
         }
 
         this.mode = Minesweeper.modes[mode];
