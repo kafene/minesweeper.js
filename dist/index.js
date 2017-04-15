@@ -18019,10 +18019,10 @@ var Minesweeper = function () {
 
             var $rows = [];
 
-            for (var x = 0; x < width; x++) {
+            for (var y = 0; y < height; y++) {
                 var $row = (0, _jquery2.default)("<div>").addClass("row");
 
-                for (var y = 0; y < height; y++) {
+                for (var x = 0; x < width; x++) {
                     // note - using <a> here because <div> doesn't
                     // respect the CSS `cursor` property.
                     var $cell = (0, _jquery2.default)("<a>").addClass("cell");
@@ -18056,6 +18056,20 @@ var Minesweeper = function () {
          * @return {Set<String>} x/y coordinates for each mine as "x,y".
          */
 
+    }, {
+        key: "confirmNewGame",
+
+
+        /**
+         * Prompt the user to start a new game if one is currently in progress.
+         */
+        value: function confirmNewGame(minesweeperInstance) {
+            if (!this.gameStarted) {
+                return true;
+            }
+
+            return confirm("A game is in progress - are you sure you want to start a new one?");
+        }
     }], [{
         key: "generateMineCoordinates",
         value: function generateMineCoordinates(_ref) {
@@ -18118,8 +18132,8 @@ var Minesweeper = function () {
                 "hard": {
                     name: "Hard",
                     mines: 99,
-                    width: 16,
-                    height: 30
+                    width: 30,
+                    height: 16
                 }
             };
         }
@@ -18265,19 +18279,21 @@ var _Minesweeper2 = _interopRequireDefault(_Minesweeper);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+// global minesweeper instance for the page.
+var gMinesweeper = void 0;
+
 // set up buttons to start the game.
 _Minesweeper2.default.createStartButtons().forEach(function ($button) {
     $button.on("click", function () {
-        if (!window.gMinesweeper.gameStarted || confirm("A game is in progress - are you sure you want to start a new one?")) {
-            window.gMinesweeper.endGame(); // this kills the timer.
-            window.gMinesweeper = new _Minesweeper2.default((0, _jquery2.default)(this).data("mode"));
-            window.gMinesweeper.render();
+        if (gMinesweeper.confirmNewGame()) {
+            gMinesweeper.endGame(); // this kills the timer.
+            gMinesweeper = new _Minesweeper2.default((0, _jquery2.default)(this).data("mode"));
+            gMinesweeper.render();
         }
     }).appendTo("#start-buttons");
 });
 
-// global minesweeper instance for the page.
-window.gMinesweeper = new _Minesweeper2.default();
-window.gMinesweeper.render();
+gMinesweeper = new _Minesweeper2.default();
+gMinesweeper.render();
 
 },{"./Minesweeper.js":396,"babel-polyfill":1,"jquery":393}]},{},[398]);

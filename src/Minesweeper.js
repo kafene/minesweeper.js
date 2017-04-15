@@ -232,10 +232,10 @@ export default class Minesweeper {
 
         const $rows = [];
 
-        for (let x = 0; x < width; x++) {
+        for (let y = 0; y < height; y++) {
             const $row = $("<div>").addClass("row");
 
-            for (let y = 0; y < height; y++) {
+            for (let x = 0; x < width; x++) {
                 // note - using <a> here because <div> doesn't
                 // respect the CSS `cursor` property.
                 const $cell = $("<a>").addClass("cell");
@@ -305,8 +305,8 @@ export default class Minesweeper {
             "hard": {
                 name: "Hard",
                 mines: 99,
-                width: 16,
-                height: 30,
+                width: 30,
+                height: 16,
             },
         };
     }
@@ -326,5 +326,16 @@ export default class Minesweeper {
                 attr("title", `${mode.name} mode (${mode.width} x ${mode.height}, ${mode.mines} mines)`).
                 attr("data-mode", name);
         });
+    }
+
+    /**
+     * Prompt the user to start a new game if one is currently in progress.
+     */
+    confirmNewGame(minesweeperInstance) {
+        if (!this.gameStarted) {
+            return true;
+        }
+
+        return confirm("A game is in progress - are you sure you want to start a new one?");
     }
 };
