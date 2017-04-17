@@ -44,6 +44,7 @@ export default class Minesweeper {
         // set up the game action buttons.
         $("#giveup-button").off().prop("disabled", false).on("click", this.gameOver.bind(this, false));
         $("#restart-button").off().prop("disabled", false).on("click", this.restart.bind(this));
+        $("#reveal-button").off().prop("disabled", false).on("click", this.reveal.bind(this));
 
         // show the number of mines in the grid.
         $("#mines").text(String(this.mode.mines));
@@ -65,7 +66,7 @@ export default class Minesweeper {
         this.gameStarted = false;
         this.timer.reset();
 
-        $("#grid .cell").removeClass("selected").text("");
+        $("#grid .cell").removeClass("selected flagged").text("");
 
         // flash the timer a few times to indicate the game has been restarted.
         $("#timer").text("000").
@@ -89,6 +90,7 @@ export default class Minesweeper {
         $("#grid .cell").off().addClass("disabled");
         $("#restart-button").off().prop("disabled", true);
         $("#giveup-button").off().prop("disabled", true);
+        $("#reveal-button").off().prop("disabled", true);
 
         // indicate the game has ended.
         $("#game").removeClass("active").addClass("ended");
@@ -101,7 +103,15 @@ export default class Minesweeper {
      * Expose the cells with mines.
      */
     reveal() {
-        $("#grid .cell.has-mine").text("x");
+        const cellHasMine = this.cellHasMine.bind(this);
+
+        $("#grid .cell").each(function () {
+            const $cell = $(this);
+
+            if (cellHasMine($cell)) {
+                $cell.addClass("has-mine").text("x");
+            }
+        });
     }
 
     /**
@@ -158,8 +168,7 @@ export default class Minesweeper {
         // If there are mines adjacent to the cell,
         // Show a number indicating the number of bombs adjacent to the cell.
         if (numAdjacentMines > 0) {
-            $cell.addClass("selected");
-            $cell.text(numAdjacentMines);
+            this.selectCell($cell, numAdjacentMines);
             this.checkGameWon();
 
             return;
@@ -167,14 +176,34 @@ export default class Minesweeper {
 
         // Select the adjacent cells to expose a region.
 
-        $cell.addClass("selected");
+        this.selectCell($cell);
 
         const $cellsWithoutMines = $adjacentCells.filter($cell => !this.cellHasMine($cell));
 
         // Simulate a click on each cell (triggering this function).
-        $cellsWithoutMines.forEach($cell => { $cell.click(); });
+        $cellsWithoutMines.forEach($cell => $cell.click());
 
         this.checkGameWon();
+    }
+
+    /**
+     * @param  {jQuery} $cell The cell to select.
+     * @param  {number} numAdjacentMines The number of mines adjacent to the cell.
+     */
+    selectCell($cell, numAdjacentMines=0) {
+        $cell.removeClass("flagged").addClass("selected");
+        $cell.text(numAdjacentMines > 0 ? numAdjacentMines : "");
+    }
+
+    /**
+     * @param  {jQuery} $cell The cell to flag.
+     */
+    flagCell($cell) {
+        if ($cell.hasClass("selected") || $cell.hasClass("has-mine")) {
+            return;
+        }
+
+        $cell.text("?").addClass("flagged");
     }
 
     /**
@@ -229,6 +258,7 @@ export default class Minesweeper {
         const { width, height } = this.mode;
 
         const onCellClicked = this.onCellClicked.bind(this);
+        const flagCell = this.flagCell.bind(this);
 
         const $rows = [];
 
@@ -248,6 +278,11 @@ export default class Minesweeper {
                     return false;
                 });
 
+                $cell.on("contextmenu", function (event) {
+                    flagCell($(this));
+                    return false;
+                });
+
                 if (this.isMineAtCoordinates(x, y)) {
                     $cell.addClass("has-mine");
                 }
@@ -259,6 +294,17 @@ export default class Minesweeper {
         }
 
         return $rows;
+    }
+
+    /**
+     * Prompt the user to start a new game if one is currently in progress.
+     */
+    confirmNewGame() {
+        if (!this.gameStarted) {
+            return true;
+        }
+
+        return confirm("A game is in progress - are you sure you want to start a new one?");
     }
 
     /**
@@ -326,16 +372,5 @@ export default class Minesweeper {
                 attr("title", `${mode.name} mode (${mode.width} x ${mode.height}, ${mode.mines} mines)`).
                 attr("data-mode", name);
         });
-    }
-
-    /**
-     * Prompt the user to start a new game if one is currently in progress.
-     */
-    confirmNewGame(minesweeperInstance) {
-        if (!this.gameStarted) {
-            return true;
-        }
-
-        return confirm("A game is in progress - are you sure you want to start a new one?");
     }
 };

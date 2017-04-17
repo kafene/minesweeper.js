@@ -82,8 +82,10 @@ body {
     color: #fff;
 }
 
+#grid .cell.flagged,
 #grid .cell.has-mine {
     color: #f00;
+    font-weight: bold;
 }
 
 #game.active #playing {
