@@ -132,10 +132,9 @@ export default class Minesweeper {
      *   - See an empty square (if there are no bombs adjacent),
      *     along with any adjacent empty squares -- exposing a region
      *
-     * @param {Event} event
-     * @param {Element} cell
+     * @param {jQuery} $cell
      */
-    onCellClicked(event, cell) {
+    onCellClicked($cell) {
         if (this.gameEnded) {
             return;
         }
@@ -145,8 +144,6 @@ export default class Minesweeper {
             this.gameStarted = true;
             this.timer.start();
         }
-
-        const $cell = $(cell);
 
         // Do nothing if the cell has already been clicked.
         if ($cell.hasClass("selected")) {
@@ -175,13 +172,16 @@ export default class Minesweeper {
         }
 
         // Select the adjacent cells to expose a region.
+        // select the cells without mines which are not already selected.
 
         this.selectCell($cell);
 
-        const $cellsWithoutMines = $adjacentCells.filter($cell => !this.cellHasMine($cell));
+        const $cellsToClick = $adjacentCells.filter($cell => {
+            return !$cell.hasClass("selected") && !this.cellHasMine($cell);
+        });
 
-        // Simulate a click on each cell (triggering this function).
-        $cellsWithoutMines.forEach($cell => $cell.click());
+        // Simulate a click on each cell.
+        $cellsToClick.forEach($cell => this.onCellClicked($cell));
 
         this.checkGameWon();
     }
@@ -274,7 +274,7 @@ export default class Minesweeper {
                 $cell.attr({"data-x": x, "data-y": y});
 
                 $cell.on("click", function (event) {
-                    onCellClicked(event, this);
+                    onCellClicked($(this));
                     return false;
                 });
 

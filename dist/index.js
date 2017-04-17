@@ -17886,13 +17886,12 @@ var Minesweeper = function () {
          *   - See an empty square (if there are no bombs adjacent),
          *     along with any adjacent empty squares -- exposing a region
          *
-         * @param {Event} event
-         * @param {Element} cell
+         * @param {jQuery} $cell
          */
 
     }, {
         key: "onCellClicked",
-        value: function onCellClicked(event, cell) {
+        value: function onCellClicked($cell) {
             var _this = this;
 
             if (this.gameEnded) {
@@ -17904,8 +17903,6 @@ var Minesweeper = function () {
                 this.gameStarted = true;
                 this.timer.start();
             }
-
-            var $cell = (0, _jquery2.default)(cell);
 
             // Do nothing if the cell has already been clicked.
             if ($cell.hasClass("selected")) {
@@ -17936,16 +17933,17 @@ var Minesweeper = function () {
             }
 
             // Select the adjacent cells to expose a region.
+            // select the cells without mines which are not already selected.
 
             this.selectCell($cell);
 
-            var $cellsWithoutMines = $adjacentCells.filter(function ($cell) {
-                return !_this.cellHasMine($cell);
+            var $cellsToClick = $adjacentCells.filter(function ($cell) {
+                return !$cell.hasClass("selected") && !_this.cellHasMine($cell);
             });
 
-            // Simulate a click on each cell (triggering this function).
-            $cellsWithoutMines.forEach(function ($cell) {
-                return $cell.click();
+            // Simulate a click on each cell.
+            $cellsToClick.forEach(function ($cell) {
+                return _this.onCellClicked($cell);
             });
 
             this.checkGameWon();
@@ -18069,7 +18067,7 @@ var Minesweeper = function () {
                     $cell.attr({ "data-x": x, "data-y": y });
 
                     $cell.on("click", function (event) {
-                        onCellClicked(event, this);
+                        onCellClicked((0, _jquery2.default)(this));
                         return false;
                     });
 
