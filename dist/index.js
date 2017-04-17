@@ -18152,6 +18152,34 @@ var Minesweeper = function () {
                 return (0, _jquery2.default)("<button>").text(mode.name).prop("type", "button").attr("title", mode.name + " mode (" + mode.width + " x " + mode.height + ", " + mode.mines + " mines)").attr("data-mode", name);
             });
         }
+
+        /**
+         * Initialize a global Minesweeper instance.
+         *
+         * @param {Window} window The window object for the page the game is being played in.
+         */
+
+    }, {
+        key: "globalInit",
+        value: function globalInit(window) {
+            var Minesweeper = this;
+
+            (0, _jquery2.default)("#start-buttons").empty();
+
+            Minesweeper.createStartButtons().forEach(function ($button) {
+                $button.on("click", function () {
+                    if (window.gMinesweeper.confirmNewGame()) {
+                        window.gMinesweeper.endGame(); // this kills the timer.
+                        window.gMinesweeper = new Minesweeper((0, _jquery2.default)(this).data("mode"));
+                        window.gMinesweeper.render();
+                    }
+                }).appendTo("#start-buttons");
+            });
+
+            // prepare the default instance
+            window.gMinesweeper = new Minesweeper();
+            window.gMinesweeper.render();
+        }
     }, {
         key: "modes",
         get: function get() {
@@ -18318,21 +18346,6 @@ var _Minesweeper2 = _interopRequireDefault(_Minesweeper);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// global minesweeper instance for the page.
-var gMinesweeper = void 0;
-
-// set up buttons to start the game.
-_Minesweeper2.default.createStartButtons().forEach(function ($button) {
-    $button.on("click", function () {
-        if (gMinesweeper.confirmNewGame()) {
-            gMinesweeper.endGame(); // this kills the timer.
-            gMinesweeper = new _Minesweeper2.default((0, _jquery2.default)(this).data("mode"));
-            gMinesweeper.render();
-        }
-    }).appendTo("#start-buttons");
-});
-
-gMinesweeper = new _Minesweeper2.default();
-gMinesweeper.render();
+_Minesweeper2.default.globalInit(window);
 
 },{"./Minesweeper.js":396,"babel-polyfill":1,"jquery":393}]},{},[398]);

@@ -369,4 +369,29 @@ export default class Minesweeper {
                 attr("data-mode", name);
         });
     }
+
+    /**
+     * Initialize a global Minesweeper instance.
+     *
+     * @param {Window} window The window object for the page the game is being played in.
+     */
+    static globalInit(window) {
+        const Minesweeper = this;
+
+        $("#start-buttons").empty();
+
+        Minesweeper.createStartButtons().forEach($button => {
+            $button.on("click", function () {
+                if (window.gMinesweeper.confirmNewGame()) {
+                    window.gMinesweeper.endGame(); // this kills the timer.
+                    window.gMinesweeper = new Minesweeper($(this).data("mode"));
+                    window.gMinesweeper.render();
+                }
+            }).appendTo("#start-buttons");
+        });
+
+        // prepare the default instance
+        window.gMinesweeper = new Minesweeper();
+        window.gMinesweeper.render();
+    }
 };
