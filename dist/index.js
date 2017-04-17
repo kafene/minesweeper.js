@@ -18078,10 +18078,6 @@ var Minesweeper = function () {
                         return false;
                     });
 
-                    if (this.isMineAtCoordinates(x, y)) {
-                        $cell.addClass("has-mine");
-                    }
-
                     $row.append($cell);
                 }
 

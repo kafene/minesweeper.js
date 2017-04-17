@@ -283,10 +283,6 @@ export default class Minesweeper {
                     return false;
                 });
 
-                if (this.isMineAtCoordinates(x, y)) {
-                    $cell.addClass("has-mine");
-                }
-
                 $row.append($cell);
             }
 
