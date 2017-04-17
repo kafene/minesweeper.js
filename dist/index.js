@@ -18334,10 +18334,6 @@ exports.default = Timer;
 
 require("babel-polyfill");
 
-var _jquery = require("jquery");
-
-var _jquery2 = _interopRequireDefault(_jquery);
-
 var _Minesweeper = require("./Minesweeper.js");
 
 var _Minesweeper2 = _interopRequireDefault(_Minesweeper);
@@ -18346,4 +18342,4 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 _Minesweeper2.default.globalInit(window);
 
-},{"./Minesweeper.js":396,"babel-polyfill":1,"jquery":393}]},{},[398]);
+},{"./Minesweeper.js":396,"babel-polyfill":1}]},{},[398]);
